@@ -1,1 +1,1 @@
-# Code
+# Non proprietary sample code for education purpose
