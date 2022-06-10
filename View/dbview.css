@@ -1,0 +1,102 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+.select-location-text {
+    font: normal 1.625rem/2.125rem subaruFontLt;
+    color: #000000;
+}
+.elestyle{
+    text-align: left;
+    font: Bold 1rem/1.5rem subaruFontBd;
+    color: #0467D6;    
+}
+
+.stats-text {
+    text-align: center;
+    font: normal 2.12rem/2.5rem subaruFontLt;
+    color: #000000;
+}
+
+
+.statstitle {
+    text-align: center;
+    font: normal 2rem/2.5rem subaruFontLt;
+    color: #000000;
+}
+
+.offerheader {    
+    font: bold 1.25rem/1.5rem subaruFontBd;
+    color: #000000;
+}
+.ambavailable-text {
+    font: normal 1rem/1.5rem subaruFontLt;
+    color: #000000;
+}
+.contact-retailer-info {
+    font: bold 1.125rem/1.375rem subaruFontBd;
+    color: #000000;
+}
+
+.welcome-user-text {
+    font: bold 1.25rem/1.5rem subaruFontBd;
+    color: #000000;
+}
+.new-to-brand-perc {
+    font: bold 3.75rem/1.875rem subaruFontBd;
+    color: #000000;
+}
+.offer-foot-note {
+    font: Italic 0.75rem/1.5rem subaruFontLt;
+    text-align: right;
+    border: 0
+}
+.retailer-row-style {
+    font: normal 0.9rem/1.375rem subaruFontMd;
+    color: #000000;
+}
+.viewby-text {
+    font: bold 1rem/1.5rem subaruFontBd;
+    color: #000000;
+}
+
+.select-location {
+    display: inline;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.locsel-text {
+    font: bold 0.875rem/1.375rem subaruFontBd;
+    color: #000000;
+}
+form-control {
+    
+}
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+}
+.top-rectangle-box {    
+    background: #EFEFEF 0% 0% no-repeat padding-box;
+    box-sizing: border-box;
+    width: 100VW;
+    margin-left: calc(-50vw + 49.2%);
+    position: relative;
+    
+}

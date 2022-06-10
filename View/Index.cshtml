@@ -1,0 +1,387 @@
+﻿@using RetailerDashboardWebUI.ViewModels;
+@using RetailerDashboardWebUI.Utils;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@model SelectDistrictViewModel
+@{
+    ViewData["Title"] = "Zone";
+    var selectedRegion = Model.Region;
+    var selectedZone = Model.Zone;
+    var districts = Model.Districts;
+    var retailerPromo = Model.RetailerPromo;
+    var userName = HttpContextAccessor.HttpContext.Session.GetString("UserName");
+}
+
+@section Styles{
+    <link href="~/css/dbview.css" rel="stylesheet" />
+}
+
+<div class="top-rectangle-box">
+    <div class="jumbotron pt-2 pb-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-12 mt-4">
+                            <span class="select-location-text">Select locations to view corresponding statistics.</span>
+                        </div>
+
+                        <div class="container">
+                            <div class="row mt-4">
+                                <div class="col-2">
+                                    <span class="locsel-text">Location: </span>
+                                </div>
+                                <div class="col-10">
+                                    <b>
+                                        <label>
+                                            @{
+                                                var separatorSpan = @"<span>&nbsp;/&nbsp;</span>";
+                                                var nationalSpan = HttpContextAccessor.HttpContext.Session.GetString("Role") == "National"
+                                                    ? @"<a href='Home'>National</a>"
+                                                    : @"<span>National</span>";
+                                                var regionSpan = HttpContextAccessor.HttpContext.Session.GetString("Role") == "Region"
+                                                    || HttpContextAccessor.HttpContext.Session.GetString("Role") == "National"
+                                                    ? @"<a href='Region'>" + selectedRegion + "</a>"
+                                                    : @"<span>" + selectedRegion + "</span>";
+                                                var zoneSpan = @"<span>" + selectedZone + "</span>";
+                                                var breadCrumb = nationalSpan + separatorSpan + regionSpan + separatorSpan + zoneSpan;
+                                            }
+                                            <span class="contact-retailer-info">@Html.Raw(@breadCrumb)</span>
+                                        </label>
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-2">
+                                    <span class="locsel-text">Selection: </span>
+                                </div>
+                                <div class="col-6">
+
+                                    <form method="post" class="form-horizontal" role="form" asp-controller="District" asp-action="Index">
+                                        <div>
+                                            <input hidden asp-for="Region" value="@selectedRegion" />
+                                            <input hidden asp-for="Zone" value="@selectedZone" />
+                                            <select class="form-control" asp-for="Name"
+                                                    asp-items="@(new SelectList(@districts, "Name", "Name"))"
+                                                    onchange="this.form.submit()">
+                                                <option disabled selected>Select a District</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 mb-3 mt-3">
+                    <div class="card">
+                        <div class="card-body my-auto">
+                            <div class="col-12 mb-3 ml-1">
+                                <span class="welcome-user-text">
+                                    Welcome @userName!
+                                </span>
+                            </div>
+                            <div class="col-12">
+                                <span>
+                                    <img src="~/images/AboutProgram.svg" />
+                                </span>
+                                <a class="btn-link elestyle ml-3" data-toggle="modal" data-target="#modal-about-the-program" href="#">Learn About Ambassadors</a>
+                                <hr />
+                            </div>
+                            <div class="col-12">
+                                <span>
+                                    <img src="~/images/ShareFeedback.svg" />
+                                </span>
+                                <a class="btn-link elestyle ml-3" href="/Feedback">Share Your Feedback</a>
+                                <hr />
+                            </div>
+                            <div class="col-12">
+                                <span>
+                                    <img src="~/images/VIPAmbassador.svg" />
+                                </span>
+                                <a class="btn-link elestyle ml-3" href="/Feedback/AmbNomination">Recommend an Owner</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="text-center stats-text">Zone Statistics</h4>
+        </div>
+    </div>
+</div>
+<div class="container mt-6 mb-4">
+    <div class="row">
+        <div class="col-sm-12  col-md-12 text-center mb-2 my-auto">
+            <span><img src="~/images/SummaryReport.svg" /></span>
+            <a class="btn-link elestyle  ml-3" asp-action="Print" target="_blank">View & Print Summary Report</a>
+        </div>     
+
+    </div>
+</div>
+
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 mb-sm-4 mb-md-0">
+            <div class="card">
+                <div class="card-body text-center">
+                    <partial name="_NewToTheBrand" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <partial name="_Promo" model="@retailerPromo" />
+        </div>
+    </div>
+</div>
+
+
+<!-- About the Program modal -->
+<div class="modal fade" id="modal-about-the-program">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">About Subaru Ambassadors</h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <partial name="_About" />
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body overflow-auto">
+            <h4 class="text-center offerheader">Ambassador Purchase Offers Redeemed (Total)*</h4>
+            <div>
+                <ul class="nav nav-pills">
+                    <li class="my-auto mr-3">
+                        <span class="viewby-text text-left" data-toggle="tab">View by:</span>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tab-content-purchase-offer-by-year" class="m-1 nav-link active btn btn-outline-dark rounded-pill" data-toggle="tab">Year</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tab-content-purchase-offer-by-model" class="m-1 nav-link btn btn-outline-dark rounded-pill" data-toggle="tab">Model</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tab-content-purchase-offer-by-year-and-model" class="m-1 nav-link btn btn-outline-dark rounded-pill" data-toggle="tab">Year and Model</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab-content-purchase-offer-by-year">
+                        <table id="purchase-offer-by-year" class="display mt-2" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Zone</th>
+                                    <th>Region</th>
+                                    <th>National</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center">Total:</th>
+                                    <th class="text-center"><span id="total-purchase-offer-by-year"></span></th>
+                                    <th class="text-center"><span id="total-purchase-offers-by-year-region"></span></th>
+                                    <th class="text-center"><span id="total-purchase-offers-by-year-national"></span></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right offer-foot-note">*Shows total number</th>
+                                </tr>
+                            </tfoot>
+
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="tab-content-purchase-offer-by-model">
+                        <table id="purchase-offer-by-model" class="display mt-2" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Zone</th>
+                                    <th>Region</th>
+                                    <th>National</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center">Total:</th>
+                                    <th class="text-center"><span id="total-purchase-offer-by-model"></span></th>
+                                    <th class="text-center"><span id="total-purchase-offers-by-model-region"></span></th>
+                                    <th class="text-center"><span id="total-purchase-offers-by-model-national"></span></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right offer-foot-note">*Shows total number</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="tab-content-purchase-offer-by-year-and-model">
+                        <table id="purchase-offer-by-year-and-model" class="display mt-2" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Model</th>
+                                    <th>Zone</th>
+                                    <th>Region</th>
+                                    <th>National</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center">Total:</th>
+                                    <th></th>
+                                    <th class="text-center"><span id="total-purchase-offer-by-year-and-model"></span></th>
+                                    <th class="text-center"><span id="total-purchase-offers-by-year-and-model-region"></span></th>
+                                    <th class="text-center"><span id="total-purchase-offers-by-year-and-model-national"></span></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right offer-foot-note">*Shows total number</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 d-none">
+    <div class="card">
+        <div class="card-body overflow-auto">
+            <h4 class="text-center offerheader">Ambassador Test Drive Offers Redeemed (Total)*</h4>
+            <div>                
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab-content-test-drive-by-year">
+                        <table id="test-drive-by-year" class="display mt-2" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Zone</th>
+                                    <th>Region</th>
+                                    <th>National</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center">Total:</th>
+                                    <th class="text-center"><span id="total-test-drive-by-year"></span></th>
+                                    <th class="text-center"><span id="total-test-drive-by-year-region"></span></th>
+                                    <th class="text-center"><span id="total-test-drive-by-year-national"></span></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right offer-foot-note">*Shows total number</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="text-center">Get to Know the Ambassadors</h4>
+        </div>
+    </div>
+</div>
+
+@*Remark -  uncomment if gender block is required*@
+@*<div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="genderAggregateContainer" style="width:100%; height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 mb-sm-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
+                    <div id="ageGroupAggregateContainer" style="width:100%; height:400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div id="vehiclesOwnedAggregateContainer" style="width:100%; height:400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 mb-sm-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
+                    <div id="vehicleAggregateContainer" style="width:100%; height:400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div id="interestAggregateContainer" style="width:100%; height:400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@section scripts {
+    <script>
+        var selectedRegion = "@selectedRegion";
+        var selectedZone = "@selectedZone";
+    </script>
+    <script src="~/js/zone.demographics.data.js" asp-append-version="true"></script>
+    <script src="~/js/zone.demographics.viz.js" asp-append-version="true"></script>
+    <script src="~/js/zone.coupon.js" asp-append-version="true"></script>
+}
